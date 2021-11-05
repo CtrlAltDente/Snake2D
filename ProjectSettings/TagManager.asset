@@ -8,6 +8,7 @@ TagManager:
   - Bonus_GrowUp
   - Bonus_SlowTime
   - Bonus_SpeedUp
+  - Border
   layers:
   - Default
   - TransparentFX
