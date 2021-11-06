@@ -3,40 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using Manager;
 
-public class Food : MonoBehaviour
+namespace Foods
 {
-    [SerializeField]
-    private GameManager _gameManager;
-
-    private enum TypeOfFood {Apple = 1,Bonus};
-
-    [SerializeField]
-    private int _appleScore;
-    [SerializeField]
-    private int _bonusScore;
-
-    [SerializeField]
-    private TypeOfFood _type;
-
-    private void Start()
+    public class Food : MonoBehaviour
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
+        [SerializeField]
+        private GameManager _gameManager;
 
-    private void OnDestroy()
-    {
-        if (GameObject.Find("Snake(Clone)"))
+        private enum TypeOfFood { Apple = 1, Bonus };
+
+        [SerializeField]
+        private int _score;
+
+        [SerializeField]
+        private TypeOfFood _type;
+
+        private void Start()
         {
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        }
+
+        public void FoodIsEaten()
+		{
             switch (_type)
             {
                 case TypeOfFood.Apple:
                     {
-                        _gameManager.AddScore(_appleScore);
+                        _gameManager.AddScore(_score);
+                        Destroy(gameObject);
                         break;
                     }
                 case TypeOfFood.Bonus:
                     {
-                        _gameManager.AddScore(_bonusScore);
+                        _gameManager.AddScore(_score);
+                        Destroy(gameObject);
                         break;
                     }
             }

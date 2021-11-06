@@ -1,4 +1,5 @@
 using UnityEngine;
+
 namespace Snake
 {
     public class SnakeHead : MonoBehaviour
@@ -50,7 +51,7 @@ namespace Snake
             Vector3 direction = new Vector3(horizontalInput, verticalInput, 0f);
             if (_timeToTurn <= 0f)
             {
-                if (direction.x != 0)
+                if (direction.x != 0 && direction.y == 0)
                 {
                     if (_previousHorizontalInput == direction.x || _previousHorizontalInput == 0f)
                     {
@@ -62,7 +63,7 @@ namespace Snake
                         _timeToTurn = _timeBlockTurn;
                     }
                 }
-                if (direction.y != 0)
+                if (direction.y != 0 && direction.x == 0)
                 {
                     if (_previousVerticalInput == direction.x || _previousVerticalInput == 0f)
                     {

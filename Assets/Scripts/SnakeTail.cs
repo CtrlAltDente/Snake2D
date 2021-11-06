@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
+using Manager;
 
 namespace Snake
 {
     public class SnakeTail : MonoBehaviour
     {
+        private GameManager _gameManager;
+
+        [SerializeField]
+        private Text _tailLenght;
+
         private TrailRenderer _trail;
 
         [SerializeField]
@@ -12,8 +19,12 @@ namespace Snake
         [SerializeField]
         private Vector3[] _trailPointsPosition;
 
+        private bool _collisionFinded = false;
+
         private void Start()
         {
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            _tailLenght = GameObject.Find("Lenght").GetComponent<Text>();
             _trail = GetComponent<TrailRenderer>();
         }
 
@@ -21,11 +32,7 @@ namespace Snake
         {
             CheckToLose();
             GetPointsPositions();
-        }
-
-        public void GrowingUp(float value)
-        {
-            _trail.time += value;
+            CalculateLenght();
         }
 
         private void CheckToLose()
@@ -35,10 +42,20 @@ namespace Snake
                 for (int j = 0; j < _mouth.Length; j++)
                 {
 
-                    if (i>3 && Vector3.Distance(_trailPointsPosition[i], _mouth[j].transform.position) < 0.1f)
+                    if (i > 3 && Vector3.Distance(_trailPointsPosition[i], _mouth[j].transform.position) < 0.1f)
                     {
-                        Debug.Log("Lose");
+                        _collisionFinded = true;
+                        _gameManager.GameOver();
+                        break;
                     }
+                    if(_collisionFinded)
+					{
+                        break;
+					}
+                }
+                if (_collisionFinded)
+                {
+                    break;
                 }
             }
         }
@@ -52,5 +69,15 @@ namespace Snake
                 _trailPointsPosition = pos;
             }
         }
+
+        public void GrowingUp(float value)
+        {
+            _trail.time += value;
+        }
+
+        private void CalculateLenght()
+		{
+            _tailLenght.text = "Lenght:" + (_trail.time / 0.25f).ToString("0");
+		}
     }
 }

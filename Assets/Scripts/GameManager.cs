@@ -1,18 +1,32 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+
 namespace Manager
 {
     public class GameManager : MonoBehaviour
     {
+        private float _seconds;
+        private float _minutes;
+        private float _hours;
+
         [SerializeField]
-        private Text _gamePausedText;
+        private GameObject _time;
         [SerializeField]
-        private Text _gameNameText;
+        private Text _secondsText;
         [SerializeField]
-        private Button _startGameButton;
+        private Text _minutesText;
         [SerializeField]
-        private Button _exitGameButton;
+        private Text _hoursText;
+
+        [SerializeField]
+        private GameObject _tailLenght;
+        [SerializeField]
+        private GameObject _gamePausedMenu;
+        [SerializeField]
+        private GameObject _gameMainMenu;
+        [SerializeField]
+        private GameObject _gameOverMenu;
         [SerializeField]
         private Text _scoreText;
 
@@ -48,6 +62,7 @@ namespace Manager
 
         private bool _paused = false;
 
+        private bool _gameOver = false;
 
         private enum Bonus : int { SlowTime = 1, GrowUp = 2, SpeedUp = 3 };
 
@@ -56,21 +71,31 @@ namespace Manager
             ShowScore();
             SpawnApple();
             SpawnBonus();
-            VisualControl();
+            GameControl();
+            CalculateTime();
         }
 
         public void StartGame()
         {
             _gameStarted = true;
-            _gameNameText.gameObject.SetActive(false);
-            _gamePausedText.gameObject.SetActive(false);
-            _exitGameButton.gameObject.SetActive(false);
-            _startGameButton.gameObject.SetActive(false);
+            _gameOver = false;
+
+            _gamePausedMenu.SetActive(false);
+            _gameMainMenu.SetActive(false);
+            _gameOverMenu.SetActive(false);
+
+            _tailLenght.SetActive(true);
+            _time.gameObject.SetActive(true);
+            _seconds = 0;
+            _minutes = 0;
+            _hours = 0;
             
             _score = 0;
             _scoreText.gameObject.SetActive(true);
             
             Instantiate(_snake);
+
+            Time.timeScale = 1;
 
             _timeToCreateBonus = Random.Range(5f, 10f);
             SpawnApple();
@@ -80,15 +105,14 @@ namespace Manager
         {
             ClearAll();
             StartGame();
-            ContinueGame();
-            StartCoroutine(ClearScore());
         }
 
-        private IEnumerator ClearScore()
-        {
-            yield return new WaitForSeconds(0.0f);
-            _score = 0;
-        }
+        public void GameOver()
+		{
+            Time.timeScale = 0;
+            _gameOverMenu.SetActive(true);
+            _gameOver = true;
+		}
 
         public void ExitGame()
         {
@@ -111,7 +135,7 @@ namespace Manager
             {
                 if (!GameObject.FindGameObjectWithTag("Apple"))
                 {
-                    Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-4f, 4f));
+                    Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
                     Instantiate(_apple, pos, Quaternion.identity);
                 }
             }
@@ -119,7 +143,7 @@ namespace Manager
 
         private void SpawnBonus()
         {
-            if (_gameStarted && !_paused)
+            if (_gameStarted && !_paused && !_gameOver)
             {
                 if (BonusDontFinded())
                 {
@@ -129,8 +153,8 @@ namespace Manager
                     }
                     else
                     {
-                        Vector2 pos = new Vector2(Random.Range(-8.7f, 9f), Random.Range(-3.5f, 4f));
-
+                        Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
+                        System.Random rnd = new System.Random();
                         Bonus bonus = (Bonus)Random.Range(1, 4);
 
                         switch (bonus)
@@ -171,7 +195,7 @@ namespace Manager
             return false;
         }
 
-        private void VisualControl()
+        private void GameControl()
         {
             if (_gameStarted)
             {
@@ -191,18 +215,20 @@ namespace Manager
 
         private void PauseGame()
         {
-            _paused = true;
-            Debug.Log("Paused");
-            _gameSpeed = Time.timeScale;
-            _gamePausedText.gameObject.SetActive(true);
-            Time.timeScale = 0f;
+            if (!_gameOver)
+            {
+                _paused = true;
+                _gameSpeed = Time.timeScale;
+                _gamePausedMenu.gameObject.SetActive(true);
+                Time.timeScale = 0;
+            }
         }
 
         private void ContinueGame()
         {
             _paused = false;
             Time.timeScale = _gameSpeed;
-            _gamePausedText.gameObject.SetActive(false);
+            _gamePausedMenu.gameObject.SetActive(false);
         }
 
         private void ClearAll()
@@ -212,6 +238,30 @@ namespace Manager
             Destroy(GameObject.FindGameObjectWithTag("Bonus_GrowUp"));
             Destroy(GameObject.FindGameObjectWithTag("Bonus_SpeedUp"));
             Destroy(GameObject.FindGameObjectWithTag("Bonus_SlowTime"));
+        }
+
+        private void CalculateTime()
+        {
+            if (Time.timeScale != 0)
+            {
+                _seconds += (Time.deltaTime / Time.timeScale);
+
+                if (_seconds > 59)
+                {
+                    _seconds = 0;
+                    _minutes += 1;
+                }
+
+                if (_minutes >= 60)
+                {
+                    _minutes = 0;
+                    _hours += 1;
+                }
+
+                _secondsText.text = _seconds.ToString("0");
+                _minutesText.text = _minutes.ToString("0") + ":";
+                _hoursText.text = _hours.ToString("0") + ":";
+            }
         }
     }
 }

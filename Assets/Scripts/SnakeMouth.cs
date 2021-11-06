@@ -1,22 +1,36 @@
 using System.Collections;
 using UnityEngine;
+using Foods;
+using Manager;
 
 namespace Snake
 {
     public class SnakeMouth : MonoBehaviour
     {
+        private GameManager _gameManager;
+
         [SerializeField]
         private float _growing;
 
         [SerializeField]
-        private float BonusTime;
+        private float _slowTimeOnSeconds;
+
+        private float _timeScale;
+
+        private AudioSource _audioSource;
 
         private enum Bonus { SlowTime = 1, GrowUp, SpeedUp };
 
         [SerializeField]
         private SnakeTail _snakeTail;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+		private void Start()
+		{
+            _audioSource = GetComponent<AudioSource>();
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		}
+
+		private void OnTriggerEnter2D(Collider2D collision)
         {
             Debug.Log("Trigger!");
 
@@ -24,30 +38,33 @@ namespace Snake
             {
                 case "Border":
                     {
-                        Debug.Log("Lose");
+                        _gameManager.GameOver();
                         break;
                     }
 
                 case "Apple":
                     {
-                        Destroy(collision.gameObject);
+                        collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         EatApple();
                         break;
                     }
                 case "Bonus_GrowUp":
                     {
+                        collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
                         EatBonus(Bonus.GrowUp);
                         break;
                     }
                 case "Bonus_SpeedUp":
                     {
+                        collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
                         EatBonus(Bonus.SpeedUp);
                         break;
                     }
                 case "Bonus_SlowTime":
                     {
+                        collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
                         EatBonus(Bonus.SlowTime);
                         break;
@@ -58,6 +75,7 @@ namespace Snake
         public void EatApple()
         {
             _snakeTail.GrowingUp(_growing);
+            _audioSource.Play();
         }
 
         private void EatBonus(Bonus bonus)
@@ -80,6 +98,7 @@ namespace Snake
                         break;
                     }
             }
+            _audioSource.Play();
         }
 
         private void EatGrowUpBonus()
@@ -89,17 +108,30 @@ namespace Snake
 
         private void EatSlowTimeBonus()
         {
-            _snakeTail.GrowingUp(_growing);
-            if (Time.timeScale > 0.6f)
+            if (Time.timeScale >= 1)
             {
-                Time.timeScale -= 0.2f;
+                _timeScale = Time.timeScale;
             }
+            _snakeTail.GrowingUp(_growing);
+            if (Time.timeScale > 0.5f)
+            {
+                Time.timeScale /= 2;
+            }
+            StartCoroutine("CancelSlowTime");
         }
+
+        private IEnumerator CancelSlowTime()
+		{
+            yield return new WaitForSeconds(_slowTimeOnSeconds);
+            Time.timeScale = _timeScale;
+		}
 
         private void EatSpeedUpBonus()
         {
             _snakeTail.GrowingUp(_growing);
             Time.timeScale += 0.2f;
         }
+
+
     }
 }
