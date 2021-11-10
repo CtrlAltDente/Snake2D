@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 5635696671900431187}
   m_Layer: 0
   m_Name: Tail
-  m_TagString: Untagged
+  m_TagString: SnakeTail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -449,7 +449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _growing: 0.25
-  BonusTime: 4
   _slowTimeOnSeconds: 6
   _snakeTail: {fileID: 5635696671900431187}
 --- !u!82 &7895783262867515493

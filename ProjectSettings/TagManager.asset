@@ -10,6 +10,7 @@ TagManager:
   - Bonus_SpeedUp
   - Border
   - SnakeMouth
+  - SnakeTail
   layers:
   - Default
   - TransparentFX

@@ -28,10 +28,15 @@ namespace Snake
             _trail = GetComponent<TrailRenderer>();
         }
 
+        public void GrowingUp(float value)
+        {
+            _trail.time += value;
+        }
+
         private void Update()
         {
-            CheckToLose();
             GetPointsPositions();
+            CheckToLose();
             CalculateLenght();
         }
 
@@ -68,11 +73,6 @@ namespace Snake
                 _trail.GetPositions(pos);
                 _trailPointsPosition = pos;
             }
-        }
-
-        public void GrowingUp(float value)
-        {
-            _trail.time += value;
         }
 
         private void CalculateLenght()

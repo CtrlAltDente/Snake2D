@@ -32,8 +32,6 @@ namespace Snake
 
 		private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log("Trigger!");
-
             switch (collision.gameObject.tag)
             {
                 case "Border":
@@ -131,7 +129,5 @@ namespace Snake
             _snakeTail.GrowingUp(_growing);
             Time.timeScale += 0.2f;
         }
-
-
     }
 }

@@ -49,7 +49,7 @@ namespace Snake
             float horizontalInput = Input.GetAxisRaw("Horizontal");
             float verticalInput = Input.GetAxisRaw("Vertical");
             Vector3 direction = new Vector3(horizontalInput, verticalInput, 0f);
-            if (_timeToTurn <= 0f)
+            if (_timeToTurn <= 0f && Time.timeScale != 0f)
             {
                 if (direction.x != 0 && direction.y == 0)
                 {
