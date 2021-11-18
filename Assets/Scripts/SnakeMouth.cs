@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using Foods;
-using Manager;
+using Managers;
+using Bonuses;
 
 namespace Snake
 {
@@ -32,7 +33,7 @@ namespace Snake
 
 		private void OnTriggerEnter2D(Collider2D collision)
         {
-            switch (collision.gameObject.tag)
+            switch (collision.gameObject.name)
             {
                 case "Border":
                     {
@@ -40,27 +41,27 @@ namespace Snake
                         break;
                     }
 
-                case "Apple":
+                case "Apple(Clone)":
                     {
                         collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         EatApple();
                         break;
                     }
-                case "Bonus_GrowUp":
+                case "Bonus_GrowUp(Clone)":
                     {
                         collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
                         EatBonus(Bonus.GrowUp);
                         break;
                     }
-                case "Bonus_SpeedUp":
+                case "Bonus_SpeedUp(Clone)":
                     {
                         collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
                         EatBonus(Bonus.SpeedUp);
                         break;
                     }
-                case "Bonus_SlowTime":
+                case "Bonus_SlowTime(Clone)":
                     {
                         collision.gameObject.GetComponent<Food>().FoodIsEaten();
                         Destroy(collision.gameObject);
@@ -120,7 +121,7 @@ namespace Snake
 
         private IEnumerator CancelSlowTime()
 		{
-            yield return new WaitForSeconds(_slowTimeOnSeconds);
+            yield return new WaitForSeconds(_slowTimeOnSeconds * Time.timeScale);
             Time.timeScale = _timeScale;
 		}
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -4675596409141678592}
   m_Layer: 0
   m_Name: Bonus_SlowTime
-  m_TagString: Bonus_SlowTime
+  m_TagString: Bonus
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,6 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3fc6949d5ee95478bbca9efc6a9246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _snake: {fileID: 0}
+  _snakeTail: {fileID: 0}
+  _snakeTailPointsPositions: []
   _gameManager: {fileID: 0}
   _score: 15
-  _type: 2
+  _typeOfFood: 2

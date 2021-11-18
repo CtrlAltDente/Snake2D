@@ -1,17 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Snake;
 
-namespace Manager
+namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+
+        public delegate void ClearCallback();
+
+        public event ClearCallback ClearEvent;
+
         private float _seconds;
         private float _minutes;
         private float _hours;
 
-        [SerializeField]
-        private GameObject _time;
         [SerializeField]
         private Text _secondsText;
         [SerializeField]
@@ -20,41 +24,22 @@ namespace Manager
         private Text _hoursText;
 
         [SerializeField]
-        private GameObject _tailLenght;
-        [SerializeField]
-        private GameObject _gamePausedMenu;
-        [SerializeField]
-        private GameObject _gameMainMenu;
-        [SerializeField]
-        private GameObject _gameOverMenu;
-        [SerializeField]
         private Text _scoreText;
 
         [SerializeField]
         private int _score = 0;
 
         [SerializeField]
-        private GameObject _snake;
+        private GameObject _snakePrefab;
+        private GameObject _snakeObject;
 
         [SerializeField]
-        private GameObject _apple;
+        private UIManager _uiManager;
+        [SerializeField]
+        private SpawnManager _spawnManager;
 
         [SerializeField]
-        private GameObject _slowTime;
-        [SerializeField]
-        private GameObject _growUp;
-        [SerializeField]
-        private GameObject _speedUp;
-
-        [SerializeField]
-        private float _minTimeToCreateBonus;
-        [SerializeField]
-        private float _maxTimeToCreateBonus;
-
-        [SerializeField]
-        private float _timeToCreateBonus;
-
-        private bool _startCreatingBonus = false;
+        private SliderValueManager _snakeSpeedSlider;
 
         private float _gameSpeed;
         
@@ -64,41 +49,11 @@ namespace Manager
 
         private bool _gameOver = false;
 
-        private enum Bonus : int { SlowTime = 1, GrowUp = 2, SpeedUp = 3 };
-
         private void Update()
         {
             ShowScore();
-            SpawnApple();
-            SpawnBonus();
             GameControl();
             CalculateTime();
-        }
-
-        public void StartGame()
-        {
-            _gameStarted = true;
-            _gameOver = false;
-
-            _gamePausedMenu.SetActive(false);
-            _gameMainMenu.SetActive(false);
-            _gameOverMenu.SetActive(false);
-
-            _tailLenght.SetActive(true);
-            _time.gameObject.SetActive(true);
-            _seconds = 0;
-            _minutes = 0;
-            _hours = 0;
-            
-            _score = 0;
-            _scoreText.gameObject.SetActive(true);
-            
-            Instantiate(_snake);
-
-            Time.timeScale = 1;
-
-            _timeToCreateBonus = Random.Range(5f, 10f);
-            SpawnApple();
         }
 
         public void Restart()
@@ -107,10 +62,32 @@ namespace Manager
             StartGame();
         }
 
+        private void ClearAll()
+        {
+            Destroy(_snakeObject);
+            ClearEvent?.Invoke();
+        }
+
+        public void StartGame()
+        {
+            _gameStarted = true;
+            _gameOver = false;
+            _paused = false;
+
+            _seconds = 0;
+            _minutes = 0;
+            _hours = 0;
+            _score = 0;
+
+            _uiManager.ShowStartedGameUI();
+            _snakeObject = Instantiate(_snakePrefab);
+            _snakeObject.GetComponent<SnakeHead>().SetSpeed(_snakeSpeedSlider.GetValue());
+        }
+
         public void GameOver()
 		{
+            _uiManager.ShowGameOverUI();
             Time.timeScale = 0;
-            _gameOverMenu.SetActive(true);
             _gameOver = true;
 		}
 
@@ -124,84 +101,46 @@ namespace Manager
             _score += value;
         }
 
+        public bool IsGameActive()
+		{
+            if(_gameStarted && !_paused && !_gameOver)
+			{
+                return true;
+			}
+            return false;
+        }
+
+        public bool IsGamePaused()
+		{
+            if(_paused)
+			{
+                return true;
+			}
+            return false;
+		}
+
+        public bool IsGameOver()
+		{
+            if(_gameOver)
+			{
+                return true;
+			}
+            return false;
+		}
+
+
         private void ShowScore()
         {
             _scoreText.text = "Score: " + _score.ToString();
         }
 
-        private void SpawnApple()
-        {
-            if (_gameStarted)
-            {
-                if (!GameObject.FindGameObjectWithTag("Apple"))
-                {
-                    Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
-                    Instantiate(_apple, pos, Quaternion.identity);
-                }
-            }
-        }
-
-        private void SpawnBonus()
-        {
-            if (_gameStarted && !_paused && !_gameOver)
-            {
-                if (BonusDontFinded())
-                {
-                    if (_timeToCreateBonus >= 0)
-                    {
-                        _timeToCreateBonus -= Time.deltaTime / Time.timeScale;
-                    }
-                    else
-                    {
-                        Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
-                        System.Random rnd = new System.Random();
-                        Bonus bonus = (Bonus)Random.Range(1, 4);
-
-                        switch (bonus)
-                        {
-                            case Bonus.GrowUp:
-                                {
-                                    Instantiate(_growUp, pos, Quaternion.identity);
-                                    break;
-                                }
-                            case Bonus.SlowTime:
-                                {
-                                    Instantiate(_slowTime, pos, Quaternion.identity);
-                                    break;
-                                }
-                            case Bonus.SpeedUp:
-                                {
-                                    Instantiate(_speedUp, pos, Quaternion.identity);
-                                    break;
-                                }
-                        }
-                        _startCreatingBonus = false;
-                    }
-                }
-            }
-        }
-
-        private bool BonusDontFinded()
-        {
-            if (!GameObject.FindGameObjectWithTag("Bonus_SlowTime") & !GameObject.FindGameObjectWithTag("Bonus_SpeedUp") & !GameObject.FindGameObjectWithTag("Bonus_GrowUp"))
-            {
-                if (!_startCreatingBonus)
-                {
-                    _timeToCreateBonus = Random.Range(_minTimeToCreateBonus, _maxTimeToCreateBonus);
-                    _startCreatingBonus = true;
-                }
-                return true;
-            }
-            return false;
-        }
-
         private void GameControl()
         {
-            if (_gameStarted)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (_gameStarted)
                 {
-                    if (!_paused)
+                    if (!IsGamePaused())
                     {
                         PauseGame();
                     }
@@ -217,27 +156,18 @@ namespace Manager
         {
             if (!_gameOver)
             {
+                _uiManager.ShowPauseGameUI();
                 _paused = true;
                 _gameSpeed = Time.timeScale;
-                _gamePausedMenu.gameObject.SetActive(true);
                 Time.timeScale = 0;
             }
         }
 
         private void ContinueGame()
         {
+            _uiManager.HidePauseGameUI();
             _paused = false;
             Time.timeScale = _gameSpeed;
-            _gamePausedMenu.gameObject.SetActive(false);
-        }
-
-        private void ClearAll()
-        {
-            Destroy(GameObject.Find("Snake(Clone)"));
-            Destroy(GameObject.FindGameObjectWithTag("Apple"));
-            Destroy(GameObject.FindGameObjectWithTag("Bonus_GrowUp"));
-            Destroy(GameObject.FindGameObjectWithTag("Bonus_SpeedUp"));
-            Destroy(GameObject.FindGameObjectWithTag("Bonus_SlowTime"));
         }
 
         private void CalculateTime()

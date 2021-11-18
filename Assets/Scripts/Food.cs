@@ -1,29 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Manager;
+using Managers;
 
 namespace Foods
 {
     public class Food : MonoBehaviour
     {
-        [SerializeField]
+        public delegate void SpawnCallback();
+        public event SpawnCallback SpawnEvent;
+
         private GameObject _snake;
-        [SerializeField]
+
         private TrailRenderer _snakeTail;
-        [SerializeField]
+
         private Vector3[] _snakeTailPointsPositions;
 
-        [SerializeField]
         private GameManager _gameManager;
 
-        private enum TypeOfFood { Apple = 1, Bonus };
+        private enum TypeOfFood : int { Apple = 1, Bonus };
 
         [SerializeField]
         private int _score;
+        private int _bonusScore;
 
         [SerializeField]
-        private TypeOfFood _type;
+        private TypeOfFood _typeOfFood;
+
+        private float _distanceToTail = 0.5f;
+
+        private float _minPosY = -4f, _minPosX = -9f, _maxPosY = 4f, _maxPosX = 9f;
 
         private void Start()
         {
@@ -31,19 +37,24 @@ namespace Foods
             CheckPosition();
         }
 
+        public void SetBonusScore(float newScore)
+		{
+            _bonusScore = (int)newScore;
+		}
         public void FoodIsEaten()
 		{
-            switch (_type)
+            switch (_typeOfFood)
             {
                 case TypeOfFood.Apple:
                     {
                         _gameManager.AddScore(_score);
+                        SpawnEvent?.Invoke();
                         Destroy(gameObject);
                         break;
                     }
                 case TypeOfFood.Bonus:
                     {
-                        _gameManager.AddScore(_score);
+                        _gameManager.AddScore(_bonusScore);
                         Destroy(gameObject);
                         break;
                     }
@@ -67,7 +78,7 @@ namespace Foods
             {
                 for (int i = 0; i < _snakeTailPointsPositions.Length; i++)
                 {
-                    if (Vector3.Distance(transform.position, _snakeTailPointsPositions[i]) < 0.5f)
+                    if (Vector3.Distance(transform.position, _snakeTailPointsPositions[i]) < _distanceToTail)
                     {
                         ResetPosition();
                     }
@@ -76,7 +87,7 @@ namespace Foods
         }
 		private void ResetPosition()
 		{
-            transform.position = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
+            transform.position = new Vector2(Random.Range(_minPosX, _maxPosX), Random.Range(_minPosY, _maxPosY));
             CheckPosition();
         }
 	}

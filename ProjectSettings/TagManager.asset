@@ -5,12 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Apple
-  - Bonus_GrowUp
-  - Bonus_SlowTime
-  - Bonus_SpeedUp
   - Border
   - SnakeMouth
   - SnakeTail
+  - Bonus
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Manager;
+using Managers;
 
 namespace Snake
 {
@@ -20,6 +20,8 @@ namespace Snake
         private Vector3[] _trailPointsPosition;
 
         private bool _collisionFinded = false;
+
+        private float _distanceToContact = 0.1f;
 
         private void Start()
         {
@@ -47,7 +49,7 @@ namespace Snake
                 for (int j = 0; j < _mouth.Length; j++)
                 {
 
-                    if (i > 3 && Vector3.Distance(_trailPointsPosition[i], _mouth[j].transform.position) < 0.1f)
+                    if (i > 3 && Vector3.Distance(_trailPointsPosition[i], _mouth[j].transform.position) <_distanceToContact)
                     {
                         _collisionFinded = true;
                         _gameManager.GameOver();
@@ -67,7 +69,7 @@ namespace Snake
 
         private void GetPointsPositions()
         {
-            if (_trail.positionCount > 2)
+            if (_trail.positionCount > 0)
             {
                 Vector3[] pos = new Vector3[_trail.positionCount];
                 _trail.GetPositions(pos);

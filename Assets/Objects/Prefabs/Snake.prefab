@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8951442e5feaf8348ad1def4bd0f37d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _normalSpeed: 3
   _headSprite: {fileID: 5635696671912490192}
   _timeBlockTurn: 0.25
 --- !u!50 &5635696671820868242
