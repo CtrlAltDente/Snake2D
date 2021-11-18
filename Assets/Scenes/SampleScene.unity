@@ -1928,6 +1928,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameManager: {fileID: 1358259485}
   _applePrefab: {fileID: 8486992632778830438, guid: 98cc53c7ca8a4bf44a8cfeb7d63b9fc1, type: 3}
+  _snakePrefab: {fileID: 5635696671820868243, guid: 6f144f3fdc46d1e48874591baa107b03, type: 3}
+  _snakeSpeedSlider: {fileID: 1251378284}
   _slowTimePrefab: {fileID: 7976917114095938944, guid: 17990eb524e3afa40965f74a5bb520c2, type: 3}
   _growUpPrefab: {fileID: 4846508250988770647, guid: c0b22441780953a48abd3933150734c9, type: 3}
   _speedUpPrefab: {fileID: 1124910714240255720, guid: 32f7ffdb5ae1eb24596ab32062236cd2, type: 3}
@@ -2595,18 +2597,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 673034334}
-        m_TargetAssemblyTypeName: Managers.SpawnManager, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1033140375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3265,10 +3255,8 @@ MonoBehaviour:
   _hoursText: {fileID: 1167638470}
   _scoreText: {fileID: 1503449536}
   _score: 0
-  _snakePrefab: {fileID: 5635696671820868243, guid: 6f144f3fdc46d1e48874591baa107b03, type: 3}
   _uiManager: {fileID: 1694566953}
   _spawnManager: {fileID: 673034334}
-  _snakeSpeedSlider: {fileID: 1251378284}
 --- !u!4 &1358259486
 Transform:
   m_ObjectHideFlags: 0
@@ -4140,18 +4128,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 673034334}
-        m_TargetAssemblyTypeName: Managers.SpawnManager, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1641073235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5007,18 +4983,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1358259485}
         m_TargetAssemblyTypeName: Manager.GameManager, Assembly-CSharp
         m_MethodName: Restart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 673034334}
-        m_TargetAssemblyTypeName: Managers.SpawnManager, Assembly-CSharp
-        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
