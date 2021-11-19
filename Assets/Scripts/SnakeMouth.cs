@@ -7,6 +7,7 @@ namespace Snake
 {
 	public class SnakeMouth : MonoBehaviour
 	{
+		[SerializeField]
 		private GameManager _gameManager;
 
 		[SerializeField]
@@ -27,7 +28,11 @@ namespace Snake
 		private void Start()
 		{
 			_audioSource = GetComponent<AudioSource>();
-			_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		}
+
+		public void SetGameManager(GameManager gameManager)
+		{
+			_gameManager = gameManager;
 		}
 
 		private void OnTriggerEnter2D(Collider2D collision)

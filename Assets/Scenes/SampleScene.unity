@@ -1777,9 +1777,9 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 800, y: 10}
+  m_Size: {x: 920, y: 10}
   m_EdgeRadius: 0
 --- !u!1 &578430188
 GameObject:
@@ -1879,9 +1879,9 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 450}
+  m_Size: {x: 10, y: 520}
   m_EdgeRadius: 0
 --- !u!1 &673034332
 GameObject:
@@ -1928,13 +1928,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameManager: {fileID: 1358259485}
   _applePrefab: {fileID: 8486992632778830438, guid: 98cc53c7ca8a4bf44a8cfeb7d63b9fc1, type: 3}
-  _snakePrefab: {fileID: 5635696671820868243, guid: 6f144f3fdc46d1e48874591baa107b03, type: 3}
+  _snake: {fileID: 5635696671820868247, guid: 6f144f3fdc46d1e48874591baa107b03, type: 3}
   _snakeSpeedSlider: {fileID: 1251378284}
   _slowTimePrefab: {fileID: 7976917114095938944, guid: 17990eb524e3afa40965f74a5bb520c2, type: 3}
   _growUpPrefab: {fileID: 4846508250988770647, guid: c0b22441780953a48abd3933150734c9, type: 3}
   _speedUpPrefab: {fileID: 1124910714240255720, guid: 32f7ffdb5ae1eb24596ab32062236cd2, type: 3}
   _delayBetweenBonusSlider: {fileID: 1545369319}
   _bonusScorePointsSlider: {fileID: 975199888}
+  _minPosY: -4
+  _minPosX: -9
+  _maxPosY: 4
+  _maxPosX: 9
 --- !u!1 &773942987
 GameObject:
   m_ObjectHideFlags: 0
@@ -2685,7 +2689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.47843137}
+  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2764,7 +2768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.47843137}
+  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3253,6 +3257,7 @@ MonoBehaviour:
   _secondsText: {fileID: 1540353725}
   _minutesText: {fileID: 1626520986}
   _hoursText: {fileID: 1167638470}
+  _lenght: {fileID: 1144976186}
   _scoreText: {fileID: 1503449536}
   _score: 0
   _uiManager: {fileID: 1694566953}
@@ -3560,7 +3565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.47843137}
+  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3730,7 +3735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.47843137}
+  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4004,7 +4009,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.47843137}
+  m_Color: {r: 0, g: 0.3652242, b: 0.6981132, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4470,9 +4475,9 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 450}
+  m_Size: {x: 10, y: 520}
   m_EdgeRadius: 0
 --- !u!1 &1766699008
 GameObject:
@@ -4572,9 +4577,9 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 800, y: 10}
+  m_Size: {x: 920, y: 10}
   m_EdgeRadius: 0
 --- !u!1 &1778700624
 GameObject:

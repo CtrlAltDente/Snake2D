@@ -15,8 +15,8 @@ namespace Managers
 		private GameObject _appleObject;
 
 		[SerializeField]
-		private GameObject _snakePrefab;
-		private GameObject _snakeObject;
+		private SnakeHead _snake;
+		private SnakeHead _spawnedPlayer;
 
 		[SerializeField]
 		private SliderValueManager _snakeSpeedSlider;
@@ -41,14 +41,20 @@ namespace Managers
 
 		private bool _startCreatingBonus = false;
 
-		BonusTypes _bonusType = new BonusTypes();
+		private Bonus _bonusType;
 
-		private float _minPosY = -4f, _minPosX = -9f, _maxPosY = 4f, _maxPosX = 9f;
+		[SerializeField]
+		private float _minPosY;
+		[SerializeField]
+		private float _minPosX;
+		[SerializeField]
+		private float _maxPosY;
+		[SerializeField]
+		private float _maxPosX;
 
 		private void Start()
 		{
-			_gameManager.ClearEvent += ClearAll;
-			_gameManager.SpawnEvent += StartGame;
+
 		}
 
 		private void Update()
@@ -56,24 +62,37 @@ namespace Managers
 			SpawnBonus();
 		}
 
+		public void SetEvents()
+		{
+			_gameManager.ClearEvent += ClearAll;
+			_gameManager.SpawnEvent += StartGame;
+		}
+
+		public void ClearEvents()
+		{
+			_gameManager.ClearEvent -= ClearAll;
+			_gameManager.SpawnEvent -= StartGame;
+		}
+
 		private void ClearAll()
 		{
 			Destroy(_appleObject);
 			Destroy(_bonusObject);
-			Destroy(_snakeObject);
+			Destroy(_spawnedPlayer.gameObject);
 		}
 
 		private void StartGame()
 		{
 			SetDelayBetweenBonuses();
-			SpawnApple();
 			SpawnPlayer();
+			SpawnApple();
 		}
 
 		private void SpawnPlayer()
 		{
-			_snakeObject = Instantiate(_snakePrefab);
-			_snakeObject.GetComponent<SnakeHead>().SetSpeed(_snakeSpeedSlider.GetValue());
+			_spawnedPlayer = Instantiate(_snake) as SnakeHead;
+			_spawnedPlayer.SetGameManager(_gameManager);
+			_spawnedPlayer.SetSpeed(_snakeSpeedSlider.GetValue());
 		}
 
 		private void SetDelayBetweenBonuses()
@@ -89,6 +108,7 @@ namespace Managers
 				Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
 				_appleObject = Instantiate(_applePrefab, pos, Quaternion.identity);
 				_appleObject.GetComponent<Food>().SpawnEvent += SpawnApple;
+				_appleObject.GetComponent<Food>().SetComponents(_gameManager, _spawnedPlayer.GetTail());
 			}
 		}
 
@@ -107,21 +127,21 @@ namespace Managers
 						Vector2 pos = new Vector2(Random.Range(_minPosX, _maxPosX), Random.Range(_minPosY, _maxPosY));
 						System.Random rnd = new System.Random();
 
-						_bonusType.SetBonusType(Random.Range(1, 4));
+						_bonusType = (Bonus)Random.Range(1, 4);
 
-						switch (_bonusType.GetBonusType())
+						switch (_bonusType)
 						{
-							case BonusTypes.Bonus.GrowUp:
+							case Bonus.GrowUp:
 								{
 									_bonusObject = Instantiate(_growUpPrefab, pos, Quaternion.identity);
 									break;
 								}
-							case BonusTypes.Bonus.SlowTime:
+							case Bonus.SlowTime:
 								{
 									_bonusObject = Instantiate(_slowTimePrefab, pos, Quaternion.identity);
 									break;
 								}
-							case BonusTypes.Bonus.SpeedUp:
+							case Bonus.SpeedUp:
 								{
 									_bonusObject = Instantiate(_speedUpPrefab, pos, Quaternion.identity);
 									break;
@@ -129,6 +149,7 @@ namespace Managers
 						}
 						_bonusObject.GetComponent<Food>().SpawnEvent += SpawnBonus;
 						_bonusObject.GetComponent<Food>().SetBonusScore(_bonusScorePointsSlider.GetValue());
+						_bonusObject.GetComponent<Food>().SetComponents(_gameManager, _spawnedPlayer.GetTail());
 						_startCreatingBonus = false;
 					}
 				}

@@ -1,4 +1,5 @@
 using Managers;
+using Snake;
 using UnityEngine;
 
 namespace Foods
@@ -9,14 +10,13 @@ namespace Foods
 		public event SpawnCallback SpawnEvent;
 
 		private GameObject _snake;
+		private SnakeTail _snakeTail;
 
-		private TrailRenderer _snakeTail;
+		private TrailRenderer _snakeTrailComponent;
 
 		private Vector3[] _snakeTailPointsPositions;
 
 		private GameManager _gameManager;
-
-		private enum TypeOfFood : int { Apple = 1, Bonus };
 
 		[SerializeField]
 		private int _score;
@@ -35,10 +35,17 @@ namespace Foods
 			CheckPosition();
 		}
 
+		public void SetComponents(GameManager gameManager, SnakeTail snakeTail)
+		{
+			_gameManager = gameManager;
+			_snakeTail = snakeTail;
+		}
+
 		public void SetBonusScore(float newScore)
 		{
 			_bonusScore = (int)newScore;
 		}
+
 		public void FoodIsEaten()
 		{
 			switch (_typeOfFood)
@@ -47,6 +54,7 @@ namespace Foods
 					{
 						_gameManager.AddScore(_score);
 						SpawnEvent?.Invoke();
+						SpawnEvent = null;
 						Destroy(gameObject);
 						break;
 					}
@@ -61,18 +69,18 @@ namespace Foods
 
 		private void GetComponentsAndValues()
 		{
-			_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+			//_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-			_snake = GameObject.FindGameObjectWithTag("Player");
-			_snakeTail = GameObject.FindGameObjectWithTag("SnakeTail").GetComponent<TrailRenderer>();
+			_snakeTrailComponent = _snakeTail.GetComponent<TrailRenderer>();
 
-			Vector3[] pos = new Vector3[_snakeTail.positionCount];
-			_snakeTail.GetPositions(pos);
+			Vector3[] pos = new Vector3[_snakeTrailComponent.positionCount];
+			_snakeTrailComponent.GetPositions(pos);
 			_snakeTailPointsPositions = pos;
 		}
+
 		private void CheckPosition()
 		{
-			if (_snakeTail.positionCount > 0)
+			if (_snakeTrailComponent.positionCount > 0)
 			{
 				for (int i = 0; i < _snakeTailPointsPositions.Length; i++)
 				{
@@ -83,6 +91,7 @@ namespace Foods
 				}
 			}
 		}
+
 		private void ResetPosition()
 		{
 			transform.position = new Vector2(Random.Range(_minPosX, _maxPosX), Random.Range(_minPosY, _maxPosY));

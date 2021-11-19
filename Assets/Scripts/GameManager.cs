@@ -22,6 +22,9 @@ namespace Managers
 		private Text _hoursText;
 
 		[SerializeField]
+		private Text _lenght;
+
+		[SerializeField]
 		private Text _scoreText;
 
 		[SerializeField]
@@ -47,6 +50,11 @@ namespace Managers
 			CalculateTime();
 		}
 
+		public Text GetLenghtTextComponent()
+		{
+			return _lenght;
+		}
+
 		public void Restart()
 		{
 			ClearAll();
@@ -56,6 +64,7 @@ namespace Managers
 		private void ClearAll()
 		{
 			ClearEvent?.Invoke();
+			_spawnManager.ClearEvents();
 		}
 
 		public void StartGame()
@@ -68,6 +77,8 @@ namespace Managers
 			_minutes = 0;
 			_hours = 0;
 			_score = 0;
+
+			_spawnManager.SetEvents();
 
 			SpawnEvent?.Invoke();
 

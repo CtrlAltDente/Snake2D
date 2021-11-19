@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 namespace Snake
@@ -27,6 +28,11 @@ namespace Snake
 
 		private float _timeToTurn = 0f;
 
+		[SerializeField]
+		private SnakeTail _snakeTail;
+		[SerializeField]
+		private SnakeMouth _snakeMouth;
+
 		private void Start()
 		{
 			_selectedDirection = Vector3.right;
@@ -39,6 +45,17 @@ namespace Snake
 			InputController();
 			MovementController();
 			DisableBlockTurn();
+		}
+
+		public void SetGameManager(GameManager gameManager)
+		{
+			_snakeTail.SetGameManager(gameManager);
+			_snakeMouth.SetGameManager(gameManager);
+		}
+
+		public SnakeTail GetTail()
+		{
+			return _snakeTail;
 		}
 
 		public void SetSpeed(float newSpeed)

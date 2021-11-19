@@ -6,6 +6,7 @@ namespace Snake
 {
 	public class SnakeTail : MonoBehaviour
 	{
+		[SerializeField]
 		private GameManager _gameManager;
 
 		[SerializeField]
@@ -25,9 +26,13 @@ namespace Snake
 
 		private void Start()
 		{
-			_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-			_tailLenght = GameObject.Find("Lenght").GetComponent<Text>();
 			_trail = GetComponent<TrailRenderer>();
+		}
+
+		public void SetGameManager(GameManager gameManager)
+		{
+			_gameManager = gameManager;
+			_tailLenght = _gameManager.GetLenghtTextComponent();
 		}
 
 		public void GrowingUp(float value)
