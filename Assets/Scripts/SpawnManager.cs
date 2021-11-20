@@ -107,6 +107,7 @@ namespace Managers
 			{
 				Vector2 pos = new Vector2(Random.Range(-9f, 9f), Random.Range(-3f, 4f));
 				_appleObject = Instantiate(_applePrefab, pos, Quaternion.identity);
+				_appleObject.GetComponent<Food>().SetPositions(_minPosX, _minPosY, _maxPosX, _maxPosY);
 				_appleObject.GetComponent<Food>().SpawnEvent += SpawnApple;
 				_appleObject.GetComponent<Food>().SetComponents(_gameManager, _spawnedPlayer.GetTail());
 			}

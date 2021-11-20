@@ -9,7 +9,6 @@ namespace Foods
 		public delegate void SpawnCallback();
 		public event SpawnCallback SpawnEvent;
 
-		private GameObject _snake;
 		private SnakeTail _snakeTail;
 
 		private TrailRenderer _snakeTrailComponent;
@@ -27,12 +26,23 @@ namespace Foods
 
 		private float _distanceToTail = 0.5f;
 
-		private float _minPosY = -4f, _minPosX = -9f, _maxPosY = 4f, _maxPosX = 9f;
+		private float _minPosX;
+		private float _minPosY;
+		private float _maxPosX;
+		private float _maxPosY;
 
 		private void Start()
 		{
 			GetComponentsAndValues();
 			CheckPosition();
+		}
+
+		public void SetPositions(float minPosX, float minPosY, float maxPosX, float maxPosY)
+		{
+			_minPosX = minPosX;
+			_minPosY = minPosY;
+			_maxPosX = maxPosX;
+			_maxPosY = maxPosY;
 		}
 
 		public void SetComponents(GameManager gameManager, SnakeTail snakeTail)
@@ -69,8 +79,6 @@ namespace Foods
 
 		private void GetComponentsAndValues()
 		{
-			//_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
 			_snakeTrailComponent = _snakeTail.GetComponent<TrailRenderer>();
 
 			Vector3[] pos = new Vector3[_snakeTrailComponent.positionCount];
